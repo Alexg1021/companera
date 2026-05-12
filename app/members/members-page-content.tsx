@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import AppLogoBar from "@/components/app-logo-bar";
 import MembersHeaderActions from "@/components/members-header-actions";
 import { avatarClassForMemberId } from "@/lib/avatar";
+import { getServerLocale } from "@/lib/get-server-locale";
+import { tForLocale } from "@/lib/i18n-messages";
 import { loadMembersDashboard, initials } from "@/lib/members-data";
 import { triageBadgeClass, triageLabel } from "@/lib/triage";
 import type { TriageStatus } from "@/lib/types/database";
@@ -48,8 +50,9 @@ export default async function MembersPageContent() {
   const { promotoraName, members, stats } = data;
   const first = promotoraName.split(/\s+/)[0] ?? promotoraName;
 
+  const locale = getServerLocale();
   const now = new Date();
-  const dateLine = new Intl.DateTimeFormat("es-MX", {
+  const dateLine = new Intl.DateTimeFormat(locale === "en" ? "en-US" : "es-MX", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -65,7 +68,7 @@ export default async function MembersPageContent() {
 
   return (
     <div className="mx-auto min-h-screen max-w-phone bg-white shadow-sm">
-      <AppLogoBar subtitle="Compañera" trailing={<MembersHeaderActions unreadCount={unreadCount} />} />
+      <AppLogoBar subtitle="Compañera" />
 
       <div className="border-b border-neutral-200 px-[18px] pb-2 pt-3">
         <div className="flex items-start justify-between gap-3">
@@ -83,15 +86,15 @@ export default async function MembersPageContent() {
         <div className="mt-2.5 flex gap-1.5">
           <div className="flex-1 rounded-lg bg-neutral-100 p-[10px] text-center">
             <div className="text-xl font-medium text-neutral-900">{stats.total}</div>
-            <div className="text-xs text-neutral-500">Personas</div>
+            <div className="text-xs text-neutral-500">{tForLocale(locale, "members.stat_personas")}</div>
           </div>
           <div className="flex-1 rounded-lg bg-neutral-100 p-[10px] text-center">
             <div className="text-xl font-medium text-status-urgent-text">{stats.urgent}</div>
-            <div className="text-xs text-neutral-500">Urgente</div>
+            <div className="text-xs text-neutral-500">{tForLocale(locale, "members.stat_urgent")}</div>
           </div>
           <div className="flex-1 rounded-lg bg-neutral-100 p-[10px] text-center">
             <div className="text-xl font-medium text-status-current-text">{stats.doneToday}</div>
-            <div className="text-xs text-neutral-500">Hoy</div>
+            <div className="text-xs text-neutral-500">{tForLocale(locale, "members.stat_today")}</div>
           </div>
         </div>
       </div>

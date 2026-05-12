@@ -6,6 +6,10 @@ const es = {
   "nav.panel": "Panel",
   "nav.settings": "Ajustes",
   "nav.main": "Navegación principal",
+  "notifications.logo_subtitle": "Alertas · Escalaciones",
+  "members.stat_personas": "Personas",
+  "members.stat_urgent": "Urgente",
+  "members.stat_today": "Hoy",
   "settings.title": "Ajustes",
   "settings.subtitle": "Cuenta e idioma",
   "settings.language": "Idioma",
@@ -23,6 +27,10 @@ const en: Record<keyof typeof es, string> = {
   "nav.panel": "Dashboard",
   "nav.settings": "Settings",
   "nav.main": "Main navigation",
+  "notifications.logo_subtitle": "Alerts · Escalations",
+  "members.stat_personas": "People",
+  "members.stat_urgent": "Urgent",
+  "members.stat_today": "Today",
   "settings.title": "Settings",
   "settings.subtitle": "Account & language",
   "settings.language": "Language",
@@ -43,4 +51,22 @@ export const messagesByLocale: Record<Locale, Record<MessageKey, string>> = {
 
 export function isLocale(value: string): value is Locale {
   return value === "es" || value === "en";
+}
+
+/** Resolve a string on the server (or anywhere) without React context. */
+export function tForLocale(locale: Locale, key: MessageKey): string {
+  return messagesByLocale[locale][key] ?? messagesByLocale.es[key] ?? key;
+}
+
+/** Same as `tForLocale` plus `{placeholder}` replacement. */
+export function tiForLocale(
+  locale: Locale,
+  key: MessageKey,
+  vars: Record<string, string | number>
+): string {
+  let str = tForLocale(locale, key);
+  for (const [k, v] of Object.entries(vars)) {
+    str = str.replaceAll(`{${k}}`, String(v));
+  }
+  return str;
 }

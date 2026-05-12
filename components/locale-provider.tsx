@@ -9,34 +9,42 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { LOCALE_PREFERENCE_KEY } from "@/lib/i18n-constants";
 import {
   type Locale,
   type MessageKey,
   isLocale,
   messagesByLocale,
+  tiForLocale,
 } from "@/lib/i18n-messages";
 
-const STORAGE_KEY = "companera-locale";
+function readStoredLocale(): Locale {
+  if (typeof window === "undefined") return "es";
+  const raw = window.localStorage.getItem(LOCALE_PREFERENCE_KEY);
+  return raw && isLocale(raw) ? raw : "es";
+}
+
+function writeLocaleCookie(locale: Locale) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${LOCALE_PREFERENCE_KEY}=${encodeURIComponent(locale)}; Path=/; Max-Age=31536000; SameSite=Lax`;
+}
 
 type LocaleContextValue = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: MessageKey) => string;
+  ti: (key: MessageKey, vars: Record<string, string | number>) => string;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
-
-function readStoredLocale(): Locale {
-  if (typeof window === "undefined") return "es";
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  return raw && isLocale(raw) ? raw : "es";
-}
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("es");
 
   useEffect(() => {
-    setLocaleState(readStoredLocale());
+    const stored = readStoredLocale();
+    setLocaleState(stored);
+    writeLocaleCookie(stored);
   }, []);
 
   useEffect(() => {
@@ -46,10 +54,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     try {
-      window.localStorage.setItem(STORAGE_KEY, next);
+      window.localStorage.setItem(LOCALE_PREFERENCE_KEY, next);
     } catch {
       /* ignore */
     }
+    writeLocaleCookie(next);
     document.documentElement.lang = next === "en" ? "en" : "es";
   }, []);
 
@@ -58,6 +67,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
       locale,
       setLocale,
       t: (key) => messagesByLocale[locale][key] ?? messagesByLocale.es[key] ?? key,
+      ti: (key, vars) => tiForLocale(locale, key, vars),
     }),
     [locale, setLocale]
   );

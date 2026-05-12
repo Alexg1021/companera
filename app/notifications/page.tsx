@@ -5,6 +5,8 @@ import { getUserRole } from "@/lib/user-role";
 import type { NotificationRow } from "@/lib/types/database";
 import AppLogoBar from "@/components/app-logo-bar";
 import NotificationListClient from "@/components/notification-list-client";
+import { getServerLocale } from "@/lib/get-server-locale";
+import { tForLocale } from "@/lib/i18n-messages";
 
 export const dynamic = "force-dynamic";
 
@@ -52,9 +54,11 @@ export default async function NotificationsPage() {
     member_name: nameById.get(n.member_id) ?? "Persona",
   }));
 
+  const locale = getServerLocale();
+
   return (
     <div className="mx-auto min-h-screen max-w-phone bg-white">
-      <AppLogoBar subtitle="Alertas · Escalaciones" />
+      <AppLogoBar subtitle={tForLocale(locale, "notifications.logo_subtitle")} />
 
       <div className="border-b border-neutral-100 px-[18px] py-3">
         <Link
