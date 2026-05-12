@@ -1,5 +1,16 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import type { UserRole } from "@/lib/types/database";
+
+async function fetchUserRole(
+  supabase: ReturnType<typeof createServerClient>,
+  userId: string
+): Promise<UserRole> {
+  const { data } = await supabase.from("users").select("role").eq("id", userId).maybeSingle();
+  const r = data?.role as UserRole | undefined;
+  if (r === "promotora" || r === "clinician" || r === "payer") return r;
+  return "promotora";
+}
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -35,18 +46,47 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   const isLogin = path === "/login";
+  const isApi = path.startsWith("/api/");
 
-  if (!user && (path === "/" || path.startsWith("/members") || path === "/success")) {
+  const protectedPage =
+    path === "/" ||
+    path.startsWith("/members") ||
+    path.startsWith("/notifications") ||
+    path === "/success" ||
+    path === "/dashboard";
+
+  if (!user && protectedPage && !isApi) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", path);
     return NextResponse.redirect(url);
   }
 
+  let userRole: UserRole = "promotora";
+  if (user) {
+    userRole = await fetchUserRole(supabase, user.id);
+  }
+
+  const isPayer = userRole === "payer";
+
   if (user && isLogin) {
     const url = request.nextUrl.clone();
-    url.pathname = "/members";
+    url.pathname = isPayer ? "/dashboard" : "/members";
     return NextResponse.redirect(url);
+  }
+
+  if (user && path === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = isPayer ? "/dashboard" : "/members";
+    return NextResponse.redirect(url);
+  }
+
+  if (user && isPayer && (path.startsWith("/members") || path === "/success" || path.startsWith("/notifications"))) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if (user && !isPayer && path.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/members", request.url));
   }
 
   return supabaseResponse;

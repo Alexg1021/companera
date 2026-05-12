@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import MembersHeaderActions from "@/components/members-header-actions";
 import { loadMembersDashboard, initials } from "@/lib/members-data";
 import { triageBadgeClass, triageLabel } from "@/lib/triage";
 import type { TriageStatus } from "@/lib/types/database";
@@ -44,6 +45,12 @@ export default async function MembersPage() {
   }
   if (!data || !data.stats) redirect("/login");
 
+  const { count: unreadRaw } = await supabase
+    .from("notifications")
+    .select("id", { count: "exact", head: true })
+    .eq("read", false);
+  const unreadCount = unreadRaw ?? 0;
+
   const { promotoraName, members, stats } = data;
   const first = promotoraName.split(/\s+/)[0] ?? promotoraName;
 
@@ -62,13 +69,18 @@ export default async function MembersPage() {
 
   return (
     <div className="mx-auto min-h-screen max-w-phone bg-white shadow-sm">
-      <header className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-xs font-semibold text-white">
-          C
+      <header className="flex items-center justify-between gap-2 border-b border-neutral-200 px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-xs font-semibold text-white">
+            C
+          </div>
+          <div>
+            <p className="text-sm font-medium leading-tight text-neutral-900">Compañera</p>
+            <p className="text-[10px] text-neutral-500">Zócalo Health</p>
+          </div>
         </div>
-        <div>
-          <p className="text-sm font-medium leading-tight text-neutral-900">Compañera</p>
-          <p className="text-[10px] text-neutral-500">Zócalo Health</p>
+        <div className="flex shrink-0 items-center gap-2">
+          <MembersHeaderActions unreadCount={unreadCount} />
         </div>
       </header>
 

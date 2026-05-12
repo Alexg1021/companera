@@ -42,3 +42,12 @@ export type TouchpointRow = {
   escalated: boolean;
   created_at: string;
 };
+
+export type NotificationRow = {
+  id: string;
+  member_id: string;
+  triggered_by: string | null;
+  message: string;
+  read: boolean;
+  created_at: string;
+};

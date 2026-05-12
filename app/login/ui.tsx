@@ -38,7 +38,7 @@ export default function LoginForm() {
           C
         </div>
         <h1 className="text-xl font-medium text-neutral-900">Compañera</h1>
-        <p className="mt-1 text-sm text-neutral-500">Zócalo Health · acceso promotora</p>
+        <p className="mt-1 text-sm text-neutral-500">Zócalo Health · promotoras y planes de salud</p>
       </div>
       <form
         onSubmit={onSubmit}

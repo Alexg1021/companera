@@ -73,3 +73,11 @@ join (values
   ('Carlos Fuentes', 'home_visit'::public.contact_type, 'contacted'::public.touchpoint_outcome,
     'Visita domicilio 5/9 · labs pedidos', timestamptz '2026-05-09 11:00:00+00')
 ) as r(full_name, contact_type, outcome, notes, created_at) on r.full_name = m.full_name;
+
+-- Opcional: usuario pagador para /dashboard
+-- 1) Crear en Authentication → Users el correo payer@zocalo.health (contraseña a tu elección).
+-- 2) Ejecutar:
+--    update public.users
+--    set role = 'payer', full_name = 'Alex Rivera'
+--    where email = 'payer@zocalo.health';
+
