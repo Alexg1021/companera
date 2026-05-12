@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserRole } from "@/lib/user-role";
 import { activePlans, dashboardMetrics, hedisMetrics } from "@/lib/dashboard-demo";
-import SignOutButton from "@/components/sign-out-button";
 
 export const dynamic = "force-dynamic";
 
@@ -82,7 +81,6 @@ export default async function DashboardPage() {
             <p className="text-xs text-neutral-500">Panel · planes de salud</p>
           </div>
         </div>
-        <SignOutButton />
       </header>
 
       <div className="border-b border-neutral-100 px-4 py-3">

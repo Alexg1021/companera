@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import NextTopLoader from "nextjs-toploader";
+import AppShell from "@/components/app-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +32,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen bg-neutral-100">
+        <NextTopLoader
+          color="#1D9E75"
+          height={3}
+          showSpinner={false}
+          shadow={false}
+          zIndex={9999}
+          crawlSpeed={220}
+        />
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }

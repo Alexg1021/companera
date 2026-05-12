@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserRole } from "@/lib/user-role";
 import type { NotificationRow } from "@/lib/types/database";
-import SignOutButton from "@/components/sign-out-button";
 import NotificationListClient from "@/components/notification-list-client";
 
 export const dynamic = "force-dynamic";
@@ -64,7 +63,6 @@ export default async function NotificationsPage() {
             <p className="text-[10px] text-neutral-500">Escalaciones</p>
           </div>
         </div>
-        <SignOutButton />
       </header>
 
       <div className="border-b border-neutral-100 px-4 py-3">

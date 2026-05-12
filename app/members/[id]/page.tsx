@@ -76,7 +76,7 @@ export default async function MemberProfilePage({ params }: PageProps) {
         </div>
       </div>
 
-      <div className="space-y-2.5 px-4 pb-32 pt-3">
+      <div className="space-y-2.5 px-4 pb-44 pt-3">
         {computedTriage === "urgent" && (
           <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
             <span className="text-amber-800" aria-hidden>
@@ -142,8 +142,10 @@ export default async function MemberProfilePage({ params }: PageProps) {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 border-t border-neutral-200 bg-white/95 px-4 pt-3 backdrop-blur-sm"
-        style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))" }}
+        className="fixed left-0 right-0 z-[90] border-t border-neutral-200 bg-white/95 px-4 pt-3 backdrop-blur-sm"
+        style={{
+          bottom: "calc(3.5rem + max(4px, env(safe-area-inset-bottom, 0px)))",
+        }}
       >
         <div className="mx-auto flex max-w-phone gap-2">
           <Link
