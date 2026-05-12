@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/brief", "destination": "/companera_brief.html" }
+  ]
+}

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compañera — A tool for Zócalo Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1A2E4A;
+    --navy-light: #243d61;
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-dark: #085041;
+    --cream: #FAF8F4;
+    --warm-gray: #F4F1EC;
+    --text-primary: #1A1A1A;
+    --text-secondary: #555;
+    --text-muted: #888;
+    --border: #E5E0D8;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 40px 72px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .header-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .header-title {
+    font-family: var(--serif);
+    font-size: clamp(38px, 6vw, 62px);
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    max-width: 640px;
+  }
+
+  .header-title em {
+    font-style: italic;
+    color: #9FE1CB;
+  }
+
+  .header-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .header-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--teal);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 8px;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .btn-primary:hover { background: #18896A; transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 11px 22px;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+
+  .header-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(29,158,117,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .circle-1 { width: 600px; height: 600px; top: -200px; right: -100px; }
+  .circle-2 { width: 300px; height: 300px; bottom: -100px; left: 200px; opacity: 0.5; }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ── SECTION ── */
+  section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 36px);
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .section-body {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 640px;
+  }
+
+  .section-body p + p { margin-top: 14px; }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+
+  .stat-cell {
+    background: white;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 38px;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-num span { color: var(--teal); }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── PROBLEM / SOLUTION SPLIT ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 40px;
+  }
+
+  .col-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .col-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .col-card-label.problem { color: #A32D2D; }
+  .col-card-label.solution { color: var(--teal-dark); }
+
+  .col-card-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.25;
+  }
+
+  .col-card p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ── FEATURE LIST ── */
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 40px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .feature-item:hover {
+    border-color: var(--teal);
+    box-shadow: 0 2px 12px rgba(29,158,117,0.08);
+  }
+
+  .feature-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--teal-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .feature-content {}
+
+  .feature-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── ARCHITECTURE ── */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  .arch-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    background: white;
+  }
+
+  .arch-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .arch-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    letter-spacing: 0.03em;
+  }
+
+  .arch-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    margin-top: 48px;
+    border-left: 3px solid var(--teal);
+    padding: 4px 0 4px 28px;
+  }
+
+  .quote-text {
+    font-family: var(--serif);
+    font-size: clamp(18px, 2.5vw, 22px);
+    color: var(--navy);
+    line-height: 1.5;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  .quote-attr {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: normal;
+  }
+
+  /* ── FOOTER CTA ── */
+  .cta-block {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 52px 48px;
+    text-align: center;
+    margin-top: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-block::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(29,158,117,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-block-inner { position: relative; z-index: 1; }
+
+  .cta-title {
+    font-family: var(--serif);
+    font-size: clamp(24px, 4vw, 34px);
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .cta-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 32px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .cta-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-credential {
+    margin-top: 28px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .cta-credential code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: rgba(255,255,255,0.07);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .header-inner { padding: 48px 24px 56px; }
+    main { padding: 0 24px 60px; }
+    .two-col { grid-template-columns: 1fr; }
+    .arch-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr; }
+    .cta-block { padding: 40px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-bg-circle circle-1"></div>
+  <div class="header-bg-circle circle-2"></div>
+  <div class="header-inner">
+    <div class="header-eyebrow">
+      <div class="header-dot"></div>
+      Built for Zócalo Health
+    </div>
+    <h1 class="header-title">A tool that <em>amplifies</em> the promotora</h1>
+    <p class="header-sub">
+      Compañera is a working prototype of a care coordination app for community health workers — built to show what a senior engineer who deeply understands Zócalo's model would build.
+    </p>
+    <div class="header-links">
+      <a href="https://companera.vercel.app" class="btn-primary" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        See the live app
+      </a>
+      <a href="https://github.com/Alexg1021/companera" class="btn-secondary" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        View source
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- WHY THIS EXISTS -->
+  <section>
+    <p class="section-label">The context</p>
+    <h2 class="section-title">The promotora is the product</h2>
+    <div class="section-body">
+      <p>Zócalo Health's 85% monthly retention isn't an algorithm — it's a person. The promotora de salud is the reason hard-to-reach Medicaid members stay engaged, keep appointments, and avoid preventable ER visits. She's the bridge between clinical plans and the realities of daily life in the community.</p>
+      <p>Most care coordination software is designed for a desk, not a doorstep. It assumes English, connectivity, and a clinical workflow that doesn't match how community health workers actually operate. Compañera is built around a different premise: the tool should serve the promotora, not the other way around.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-cell">
+        <div class="stat-num"><span>85%</span></div>
+        <div class="stat-label">Monthly member retention — 12 points above industry</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num"><span>23%</span></div>
+        <div class="stat-label">Reduction in ER visits vs. control group</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">$<span>340</span></div>
+        <div class="stat-label">Estimated savings per member per month</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM / SOLUTION -->
+  <section>
+    <p class="section-label">The thinking</p>
+    <h2 class="section-title">What the gap looks like</h2>
+    <div class="section-body">
+      <p>A promotora manages 15–20 members across scattered neighborhoods, communicating primarily via WhatsApp, tracking follow-ups in her head or a notes app, and relying on institutional memory that doesn't survive staff transitions. When a member goes quiet, there's no system that flags it.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-label problem">The gap</div>
+        <div class="col-card-title">No tool built for the field</div>
+        <p>Existing EMRs and care platforms are desktop-first, English-only, and optimized for clinical billing — not community outreach. Promotoras work around them, not with them.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-card-label solution">The opportunity</div>
+        <div class="col-card-title">Amplify what's already working</div>
+        <p>A lightweight, mobile-first, Spanish-first companion that shows who needs outreach, makes logging a touchpoint take 30 seconds, and surfaces the right context at the right moment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WAS BUILT -->
+  <section>
+    <p class="section-label">What was built</p>
+    <h2 class="section-title">A working prototype, not a mockup</h2>
+    <div class="section-body">
+      <p>Compañera is a full-stack web app with a real Postgres database, role-based auth, and live data flowing through every screen. The demo credentials below let you log in as a promotora and walk through an actual workflow end to end.</p>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-content">
+          <div class="feature-title">Server-side triage</div>
+          <div class="feature-desc">Members are automatically prioritized by urgency — no contact in 7+ days, post-ER without follow-up, upcoming Medicaid renewal. Computed on the server and updated instantly when a touchpoint is logged.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📋</div>
+        <div class="feature-content">
+          <div class="feature-title">Touchpoint logging</div>
+          <div class="feature-desc">Log a WhatsApp, call, home visit, or clinic interaction in under 30 seconds. Notes are bilingual. Outcome updates the member's status and timeline immediately via revalidatePath.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🚨</div>
+        <div class="feature-content">
+          <div class="feature-title">Clinical escalation</div>
+          <div class="feature-desc">One toggle on the log form creates a notification record for the clinical team. The pattern is wired through the DB with RLS — it's the foundation for a real notification system.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <div class="feature-content">
+          <div class="feature-title">Payer dashboard</div>
+          <div class="feature-desc">A separate role-gated view for health plan partners showing retention, HEDIS metrics, and active plan partnerships. Active member count pulls from live DB data.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-content">
+          <div class="feature-title">English / Spanish toggle</div>
+          <div class="feature-desc">Full i18n across all UI surfaces. Every static string is keyed through a locale dictionary — switch languages in Settings and the entire app responds immediately.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        <div class="feature-content">
+          <div class="feature-title">Mobile-first, installable</div>
+          <div class="feature-desc">Built for a 390px phone screen with safe-area insets and 44px tap targets. Includes a PWA manifest — add to home screen on any device and it runs like a native app.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section>
+    <p class="section-label">Under the hood</p>
+    <h2 class="section-title">Architecture decisions worth noting</h2>
+    <div class="section-body">
+      <p>The choices below aren't accidental — each one reflects a real constraint or future need of a system like this.</p>
+    </div>
+
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-card-title">
+          Triage on the server
+          <span class="arch-tag">lib/triage.ts</span>
+        </div>
+        <p>Urgency logic runs server-side and persists to the DB on each touchpoint save. The client never computes it. This keeps the list consistent across devices and makes future rule changes a single edit.</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-title">
+          Role model in the DB
+          <span class="arch-tag">users.role</span>
+        </div>
+        <p>A <code style="font-family:monospace;font-size:12px;background:#f4f1ec;padding:1px 5px;border-radius:3px;">role</code> column on every user record drives routing at the middleware level. Promotoras, clinicians, and payers each land in the right context — built for a multi-role system from day one.</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-title">
+          RLS throughout
+          <span class="arch-tag">Supabase policies</span>
+        </div>
+        <p>Row Level Security means a promotora can only see her own members. The anon key is safe to expose in the browser because the DB itself enforces access — no server-side secret key required.</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-title">
+          Notifications as a pattern
+          <span class="arch-tag">notifications table</span>
+        </div>
+        <p>Escalations don't just set a flag — they write a row to a <code style="font-family:monospace;font-size:12px;background:#f4f1ec;padding:1px 5px;border-radius:3px;">notifications</code> table with member linkage and author. It's a foundation, not a workaround.</p>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Every member has a dedicated care team with an in-person promotora de salud, a virtual MD, and a virtual behavioral health specialist."</p>
+      <p class="quote-attr">— Zócalo Health, on their care model</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-block">
+    <div class="cta-block-inner">
+      <h2 class="cta-title">Try it yourself</h2>
+      <p class="cta-sub">Log in as a promotora, work through Elena's outreach, log a touchpoint, and watch the member list update in real time.</p>
+      <div class="cta-links">
+        <a href="https://companera.vercel.app" class="btn-primary" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open Compañera
+        </a>
+        <a href="https://github.com/Alexg1021/companera" class="btn-secondary" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View source
+        </a>
+      </div>
+      <p class="cta-credential">
+        Demo login: <code>demo@zocalo.health</code> &nbsp;/&nbsp; <code>zocalo2024</code>
+      </p>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>
