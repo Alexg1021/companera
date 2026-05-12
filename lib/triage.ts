@@ -45,10 +45,10 @@ export function triageLabel(status: TriageStatus): string {
 export function triageBadgeClass(status: TriageStatus): string {
   switch (status) {
     case "urgent":
-      return "bg-status-urgent-bg text-status-urgent-text text-[10px] font-medium px-[7px] py-[2px] rounded-full";
+      return "bg-status-urgent-bg text-status-urgent-text text-[10px] font-medium leading-tight px-2.5 py-1 rounded-full";
     case "upcoming":
-      return "bg-status-upcoming-bg text-status-upcoming-text text-[10px] font-medium px-[7px] py-[2px] rounded-full";
+      return "bg-status-upcoming-bg text-status-upcoming-text text-[10px] font-medium leading-tight px-2.5 py-1 rounded-full";
     case "current":
-      return "bg-status-current-bg text-status-current-text text-[10px] font-medium px-[7px] py-[2px] rounded-full";
+      return "bg-status-current-bg text-status-current-text text-[10px] font-medium leading-tight px-2.5 py-1 rounded-full";
   }
 }
