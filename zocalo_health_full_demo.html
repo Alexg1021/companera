@@ -1,0 +1,541 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{display:flex;gap:24px;padding:1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);align-items:flex-start;justify-content:center;}
+.phone{width:340px;background:var(--color-background-primary);border-radius:32px;border:0.5px solid var(--color-border-secondary);overflow:hidden;display:flex;flex-direction:column;min-height:680px;flex-shrink:0;}
+.sidebar{display:flex;flex-direction:column;gap:8px;width:160px;flex-shrink:0;}
+.nav-btn{padding:9px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;color:var(--color-text-secondary);cursor:pointer;text-align:left;transition:all 0.15s;}
+.nav-btn.active{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:500;}
+.nav-label{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em;padding:4px 2px;margin-top:8px;}
+.screen{display:none;flex-direction:column;flex:1;}
+.screen.active{display:flex;}
+.topbar{padding:14px 18px 10px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;}
+.topbar-title{font-size:16px;font-weight:500;color:var(--color-text-primary);}
+.topbar-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
+.back-btn{font-size:12px;color:#1D9E75;cursor:pointer;display:flex;align-items:center;gap:3px;background:none;border:none;}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;}
+.av-teal{background:#E1F5EE;color:#085041;}
+.av-coral{background:#FAECE7;color:#712B13;}
+.av-amber{background:#FAEEDA;color:#633806;}
+.av-purple{background:#EEEDFE;color:#3C3489;}
+.av-blue{background:#E6F1FB;color:#0C447C;}
+.av-pink{background:#FBEAF0;color:#72243E;}
+.scroll-body{overflow-y:auto;flex:1;}
+.member-row{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:background 0.12s;}
+.member-row:hover{background:var(--color-background-secondary);}
+.minfo{flex:1;min-width:0;}
+.mname{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.mlast{font-size:11px;color:var(--color-text-secondary);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.flag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;flex-shrink:0;}
+.f-red{background:#FCEBEB;color:#A32D2D;}
+.f-amber{background:#FAEEDA;color:#854F0B;}
+.f-green{background:#EAF3DE;color:#3B6D11;}
+.sec-label{font-size:10px;color:var(--color-text-tertiary);padding:9px 18px 3px;text-transform:uppercase;letter-spacing:0.04em;}
+.stats-row{display:flex;gap:6px;padding:10px 18px 0;}
+.stat-chip{flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 8px;text-align:center;}
+.stat-num{font-size:17px;font-weight:500;color:var(--color-text-primary);}
+.stat-lbl{font-size:9px;color:var(--color-text-tertiary);margin-top:1px;}
+.stat-num.red{color:#A32D2D;}
+.stat-num.green{color:#3B6D11;}
+.pbody{padding:14px 18px;flex:1;overflow-y:auto;}
+.phead{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.pname{font-size:15px;font-weight:500;color:var(--color-text-primary);}
+.psub{font-size:12px;color:var(--color-text-secondary);margin-top:2px;}
+.card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px;}
+.clabel{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;}
+.crow{display:flex;justify-content:space-between;margin-bottom:4px;}
+.ck{font-size:12px;color:var(--color-text-secondary);}
+.cv{font-size:12px;color:var(--color-text-primary);}
+.cv-red{color:#A32D2D;}
+.cv-green{color:#3B6D11;}
+.alert-card{background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px;display:flex;gap:8px;}
+.alert-text{font-size:12px;color:#633806;line-height:1.5;}
+.tl-item{display:flex;gap:8px;margin-bottom:12px;}
+.tl-dot{width:7px;height:7px;border-radius:50%;background:#1D9E75;margin-top:4px;flex-shrink:0;}
+.tl-dot-g{background:var(--color-border-secondary);}
+.tl-date{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;}
+.tl-note{font-size:12px;color:var(--color-text-primary);}
+.arow{display:flex;gap:7px;padding:12px 18px;border-top:0.5px solid var(--color-border-tertiary);}
+.btn-p{flex:1;background:#1D9E75;color:#fff;border:none;border-radius:var(--border-radius-md);padding:9px;font-size:12px;font-weight:500;cursor:pointer;}
+.btn-o{flex:1;background:none;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px;font-size:12px;color:var(--color-text-primary);cursor:pointer;}
+.btn-r{flex:1;background:none;border:0.5px solid #F09595;border-radius:var(--border-radius-md);padding:9px;font-size:12px;color:#A32D2D;cursor:pointer;}
+.log-body{padding:14px 18px;flex:1;display:flex;flex-direction:column;gap:12px;}
+.llabel{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.pills{display:flex;gap:6px;flex-wrap:wrap;}
+.pill{padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);font-size:11px;color:var(--color-text-secondary);cursor:pointer;background:none;}
+.pill.sel{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:500;}
+textarea{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px;font-size:12px;color:var(--color-text-primary);background:var(--color-background-primary);resize:none;height:80px;font-family:var(--font-sans);}
+.esc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:0.5px solid #F09595;border-radius:var(--border-radius-md);background:#FCEBEB;}
+.esc-lbl{font-size:12px;color:#A32D2D;}
+.tog{width:34px;height:19px;border-radius:10px;background:var(--color-border-secondary);position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
+.tog.on{background:#E24B4A;}
+.tog-k{width:15px;height:15px;border-radius:50%;background:white;position:absolute;top:2px;left:2px;transition:left 0.2s;}
+.tog.on .tog-k{left:17px;}
+.success-s{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 18px;gap:12px;}
+.suc-icon{width:52px;height:52px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;}
+.suc-title{font-size:15px;font-weight:500;color:var(--color-text-primary);}
+.suc-sub{font-size:12px;color:var(--color-text-secondary);text-align:center;line-height:1.6;}
+.wa-body{flex:1;padding:12px 18px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;background:#f0f4f0;}
+.wa-them{align-self:flex-start;max-width:75%;background:var(--color-background-primary);border-radius:0 10px 10px 10px;padding:8px 10px;font-size:12px;color:var(--color-text-primary);line-height:1.5;}
+.wa-me{align-self:flex-end;max-width:75%;background:#1D9E75;border-radius:10px 10px 0 10px;padding:8px 10px;font-size:12px;color:#fff;line-height:1.5;}
+.wa-time{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;}
+.wa-time-r{text-align:right;color:#9FE1CB;}
+.wa-input-row{display:flex;gap:8px;padding:10px 18px;border-top:0.5px solid var(--color-border-tertiary);align-items:center;}
+.wa-input{flex:1;border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:7px 12px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary);}
+.dash-body{padding:14px 18px;flex:1;overflow-y:auto;}
+.dash-tabs{display:flex;gap:0;margin-bottom:14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;}
+.dash-tab{flex:1;padding:7px;font-size:11px;text-align:center;cursor:pointer;color:var(--color-text-secondary);background:none;border:none;}
+.dash-tab.active{background:#1D9E75;color:#fff;font-weight:500;}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.metric-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;}
+.metric-num{font-size:22px;font-weight:500;color:var(--color-text-primary);}
+.metric-lbl{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;}
+.metric-delta{font-size:10px;color:#3B6D11;margin-top:3px;}
+.metric-delta-r{color:#A32D2D;}
+.bar-wrap{margin-bottom:12px;}
+.bar-label-row{display:flex;justify-content:space-between;margin-bottom:4px;}
+.bar-lbl{font-size:11px;color:var(--color-text-secondary);}
+.bar-val{font-size:11px;color:var(--color-text-primary);font-weight:500;}
+.bar-track{height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;}
+.plan-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.plan-name{font-size:12px;color:var(--color-text-primary);}
+.plan-sub{font-size:10px;color:var(--color-text-tertiary);}
+.plan-badge{font-size:10px;padding:2px 8px;border-radius:20px;}
+.logo-bar{padding:10px 18px 8px;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.logo-mark{width:26px;height:26px;border-radius:8px;background:#1D9E75;display:flex;align-items:center;justify-content:center;}
+.logo-text{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.logo-sub{font-size:10px;color:var(--color-text-secondary);}
+</style>
+
+<h2 class="sr-only">Zócalo Health full demo app with promotora member list, member profiles, WhatsApp messaging, touchpoint logging, and health plan dashboard screens</h2>
+
+<div class="wrap">
+
+<div class="sidebar">
+  <div class="nav-label">Promotora view</div>
+  <button class="nav-btn active" onclick="goScreen('s-list')">My members</button>
+  <button class="nav-btn" onclick="goScreen('s-elena')">Elena — urgent</button>
+  <button class="nav-btn" onclick="goScreen('s-jorge')">Jorge — post-ER</button>
+  <button class="nav-btn" onclick="goScreen('s-lucia')">Lucía — renewal</button>
+  <button class="nav-btn" onclick="goScreen('s-wa')">WhatsApp thread</button>
+  <button class="nav-btn" onclick="goScreen('s-log')">Log touchpoint</button>
+  <button class="nav-btn" onclick="goScreen('s-success')">Saved!</button>
+  <div class="nav-label">Health plan view</div>
+  <button class="nav-btn" onclick="goScreen('s-dash')">Payer dashboard</button>
+</div>
+
+<div class="phone">
+
+  <!-- LOGO BAR (always visible) -->
+  <div class="logo-bar">
+    <div class="logo-mark"><i class="ti ti-heart" style="font-size:14px;color:#fff;" aria-hidden="true"></i></div>
+    <div>
+      <div class="logo-text">Zócalo Health</div>
+      <div class="logo-sub">Promotora companion</div>
+    </div>
+  </div>
+
+  <!-- S1: Member list -->
+  <div class="screen active" id="s-list">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div>
+          <div class="topbar-title">Buenos días, Rosa</div>
+          <div class="topbar-sub">Lunes, 11 de mayo · Kenmore</div>
+        </div>
+        <div class="av av-teal" style="width:30px;height:30px;font-size:11px;">RM</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-chip"><div class="stat-num">14</div><div class="stat-lbl">Members</div></div>
+        <div class="stat-chip"><div class="stat-num red">3</div><div class="stat-lbl">Urgent</div></div>
+        <div class="stat-chip"><div class="stat-num green">2</div><div class="stat-lbl">Done today</div></div>
+      </div>
+    </div>
+    <div class="scroll-body">
+      <div class="sec-label">Needs outreach</div>
+      <div class="member-row" onclick="goScreen('s-elena')">
+        <div class="av av-coral" style="width:34px;height:34px;font-size:12px;">EC</div>
+        <div class="minfo"><div class="mname">Elena Cruz</div><div class="mlast">Sin contacto 14 días · faltó cita 5/2</div></div>
+        <span class="flag f-red">Urgente</span>
+      </div>
+      <div class="member-row" onclick="goScreen('s-jorge')">
+        <div class="av av-amber" style="width:34px;height:34px;font-size:12px;">JM</div>
+        <div class="minfo"><div class="mname">Jorge Martínez</div><div class="mlast">Visita ER 5/8 · sin seguimiento</div></div>
+        <span class="flag f-red">Urgente</span>
+      </div>
+      <div class="member-row" onclick="goScreen('s-lucia')">
+        <div class="av av-purple" style="width:34px;height:34px;font-size:12px;">LR</div>
+        <div class="minfo"><div class="mname">Lucía Ramírez</div><div class="mlast">Renovación Medicaid vence 5/31</div></div>
+        <span class="flag f-amber">Pronto</span>
+      </div>
+      <div class="sec-label">Al día</div>
+      <div class="member-row" onclick="goScreen('s-list')">
+        <div class="av av-teal" style="width:34px;height:34px;font-size:12px;">MG</div>
+        <div class="minfo"><div class="mname">María González</div><div class="mlast">Llamada 5/10 · próx cita 5/18</div></div>
+        <span class="flag f-green">Bien</span>
+      </div>
+      <div class="member-row" onclick="goScreen('s-list')">
+        <div class="av av-blue" style="width:34px;height:34px;font-size:12px;">CF</div>
+        <div class="minfo"><div class="mname">Carlos Fuentes</div><div class="mlast">Visita domicilio 5/9 · labs pedidos</div></div>
+        <span class="flag f-green">Bien</span>
+      </div>
+      <div class="member-row" onclick="goScreen('s-list')">
+        <div class="av av-pink" style="width:34px;height:34px;font-size:12px;">AT</div>
+        <div class="minfo"><div class="mname">Ana Torres</div><div class="mlast">WhatsApp 5/9 · se siente bien</div></div>
+        <span class="flag f-green">Bien</span>
+      </div>
+      <div class="member-row" onclick="goScreen('s-list')">
+        <div class="av av-amber" style="width:34px;height:34px;font-size:12px;">RV</div>
+        <div class="minfo"><div class="mname">Rosa Vega</div><div class="mlast">Texto 5/8 · transporte arreglado</div></div>
+        <span class="flag f-green">Bien</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2: Elena profile -->
+  <div class="screen" id="s-elena">
+    <div class="topbar">
+      <div class="topbar-row">
+        <button class="back-btn" onclick="goScreen('s-list')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Mis miembros</button>
+        <span style="font-size:11px;color:var(--color-text-tertiary);">Perfil</span>
+      </div>
+    </div>
+    <div class="pbody">
+      <div class="phead">
+        <div class="av av-coral" style="width:44px;height:44px;font-size:15px;">EC</div>
+        <div><div class="pname">Elena Cruz</div><div class="psub">54 años · Diabetes T2, hipertensión</div></div>
+      </div>
+      <div class="alert-card">
+        <i class="ti ti-alert-triangle" style="font-size:15px;color:#854F0B;flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div class="alert-text">Sin contacto en 14 días. IA sugiere: intenta WhatsApp primero — si no responde en 24h, llama.</div>
+      </div>
+      <div class="card">
+        <div class="clabel">Plan de salud</div>
+        <div class="crow"><span class="ck">Aseguradora</span><span class="cv">Health Net Medicaid</span></div>
+        <div class="crow"><span class="ck">Próxima cita</span><span class="cv cv-red">No programada</span></div>
+        <div class="crow"><span class="ck">Idioma</span><span class="cv">Solo español</span></div>
+        <div class="crow"><span class="ck">Contacto preferido</span><span class="cv">WhatsApp</span></div>
+      </div>
+      <div class="card">
+        <div class="clabel">Historial reciente</div>
+        <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-date">27 abr</div><div class="tl-note">Llamada — no contestó. Dejó mensaje.</div></div></div>
+        <div class="tl-item"><div class="tl-dot tl-dot-g"></div><div><div class="tl-date">25 abr</div><div class="tl-note">WhatsApp — dijo que estaba ocupada con familia.</div></div></div>
+        <div class="tl-item" style="margin-bottom:0"><div class="tl-dot tl-dot-g"></div><div><div class="tl-date">18 abr</div><div class="tl-note">Visita domicilio — PA elevada 148/92.</div></div></div>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-o" onclick="goScreen('s-log')"><i class="ti ti-pencil" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:3px;"></i>Registrar</button>
+      <button class="btn-p" onclick="goScreen('s-wa')"><i class="ti ti-brand-whatsapp" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:3px;"></i>WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- S3: Jorge profile -->
+  <div class="screen" id="s-jorge">
+    <div class="topbar">
+      <div class="topbar-row">
+        <button class="back-btn" onclick="goScreen('s-list')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Mis miembros</button>
+        <span style="font-size:11px;color:var(--color-text-tertiary);">Perfil</span>
+      </div>
+    </div>
+    <div class="pbody">
+      <div class="phead">
+        <div class="av av-amber" style="width:44px;height:44px;font-size:15px;">JM</div>
+        <div><div class="pname">Jorge Martínez</div><div class="psub">61 años · COPD, diabetes T2</div></div>
+      </div>
+      <div class="alert-card">
+        <i class="ti ti-alert-triangle" style="font-size:15px;color:#854F0B;flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div class="alert-text">Visita a urgencias el 8 may. Sin seguimiento post-ER. Alto riesgo de re-hospitalización — contactar hoy.</div>
+      </div>
+      <div class="card">
+        <div class="clabel">Plan de salud</div>
+        <div class="crow"><span class="ck">Aseguradora</span><span class="cv">Anthem Blue Cross</span></div>
+        <div class="crow"><span class="ck">Próxima cita</span><span class="cv cv-red">No programada</span></div>
+        <div class="crow"><span class="ck">Idioma</span><span class="cv">Español / inglés básico</span></div>
+        <div class="crow"><span class="ck">Motivo ER</span><span class="cv">Dificultad respiratoria</span></div>
+      </div>
+      <div class="card">
+        <div class="clabel">Historial reciente</div>
+        <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-date">8 may</div><div class="tl-note">Visita ER — dificultad respiratoria, alta en 6h.</div></div></div>
+        <div class="tl-item"><div class="tl-dot tl-dot-g"></div><div><div class="tl-date">30 abr</div><div class="tl-note">Llamada de seguimiento — estable, toma medicamentos.</div></div></div>
+        <div class="tl-item" style="margin-bottom:0"><div class="tl-dot tl-dot-g"></div><div><div class="tl-date">15 abr</div><div class="tl-note">Cita virtual con Dr. Reyes — ajuste de inhalador.</div></div></div>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-o" onclick="goScreen('s-log')"><i class="ti ti-pencil" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:3px;"></i>Registrar</button>
+      <button class="btn-p" onclick="goScreen('s-wa')"><i class="ti ti-phone" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:3px;"></i>Llamar</button>
+    </div>
+  </div>
+
+  <!-- S4: Lucía profile -->
+  <div class="screen" id="s-lucia">
+    <div class="topbar">
+      <div class="topbar-row">
+        <button class="back-btn" onclick="goScreen('s-list')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Mis miembros</button>
+        <span style="font-size:11px;color:var(--color-text-tertiary);">Perfil</span>
+      </div>
+    </div>
+    <div class="pbody">
+      <div class="phead">
+        <div class="av av-purple" style="width:44px;height:44px;font-size:15px;">LR</div>
+        <div><div class="pname">Lucía Ramírez</div><div class="psub">38 años · Ansiedad, asma leve</div></div>
+      </div>
+      <div class="alert-card" style="background:#FAEEDA;">
+        <i class="ti ti-file-description" style="font-size:15px;color:#854F0B;flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div class="alert-text">Renovación de Medicaid vence el 31 mayo. Necesita documentos de ingresos. IA puede ayudar a pre-llenar el formulario.</div>
+      </div>
+      <div class="card">
+        <div class="clabel">Plan de salud</div>
+        <div class="crow"><span class="ck">Aseguradora</span><span class="cv">Health Net Medicaid</span></div>
+        <div class="crow"><span class="ck">Renovación</span><span class="cv cv-red">Vence 31 mayo</span></div>
+        <div class="crow"><span class="ck">Documentos</span><span class="cv cv-red">Pendientes</span></div>
+        <div class="crow"><span class="ck">Idioma</span><span class="cv">Solo español</span></div>
+      </div>
+      <div class="card">
+        <div class="clabel">Documentos necesarios</div>
+        <div class="crow"><span class="ck"><i class="ti ti-circle-x" style="font-size:12px;color:#A32D2D;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Comprobante de ingresos</span><span class="cv cv-red">Falta</span></div>
+        <div class="crow"><span class="ck"><i class="ti ti-circle-check" style="font-size:12px;color:#3B6D11;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Identificación</span><span class="cv cv-green">Listo</span></div>
+        <div class="crow"><span class="ck"><i class="ti ti-circle-x" style="font-size:12px;color:#A32D2D;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Comprobante de domicilio</span><span class="cv cv-red">Falta</span></div>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-o" onclick="goScreen('s-log')"><i class="ti ti-pencil" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:3px;"></i>Registrar</button>
+      <button class="btn-p" onclick="goScreen('s-wa')"><i class="ti ti-brand-whatsapp" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:3px;"></i>WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- S5: WhatsApp -->
+  <div class="screen" id="s-wa">
+    <div class="topbar">
+      <div class="topbar-row">
+        <button class="back-btn" onclick="goScreen('s-elena')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Elena Cruz</button>
+        <i class="ti ti-brand-whatsapp" style="font-size:18px;color:#1D9E75;" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="wa-body" id="wa-msgs">
+      <div>
+        <div class="wa-them">Hola Elena, soy Rosa de Zócalo Health. ¿Cómo se ha sentido esta semana?</div>
+        <div class="wa-time">Rosa · 9:02 AM</div>
+      </div>
+      <div>
+        <div class="wa-me">Ay Rosa, gracias por escribir. He estado muy estresada con lo del trabajo de mi esposo...</div>
+        <div class="wa-time wa-time-r">Elena · 9:18 AM</div>
+      </div>
+      <div>
+        <div class="wa-them">Entiendo, eso es muy difícil. ¿Ha podido tomar sus medicamentos para la presión?</div>
+        <div class="wa-time">Rosa · 9:20 AM</div>
+      </div>
+      <div>
+        <div class="wa-me">Sí, eso sí. Pero no pude ir a mi cita porque no tuve quien cuide a los niños.</div>
+        <div class="wa-time wa-time-r">Elena · 9:24 AM</div>
+      </div>
+      <div>
+        <div class="wa-them">No se preocupe. La podemos reagendar para la próxima semana y conseguirle transporte. ¿Le parece el martes?</div>
+        <div class="wa-time">Rosa · 9:25 AM</div>
+      </div>
+      <div>
+        <div class="wa-me">Sí, el martes está bien. Muchas gracias Rosa, siempre tan amable.</div>
+        <div class="wa-time wa-time-r">Elena · 9:27 AM</div>
+      </div>
+    </div>
+    <div class="wa-input-row">
+      <input class="wa-input" placeholder="Escribir mensaje..." id="wa-input" />
+      <button class="btn-p" style="flex:0;padding:7px 12px;border-radius:20px;" onclick="sendWa()"><i class="ti ti-send" aria-hidden="true" style="font-size:13px;"></i></button>
+    </div>
+  </div>
+
+  <!-- S6: Log touchpoint -->
+  <div class="screen" id="s-log">
+    <div class="topbar">
+      <div class="topbar-row">
+        <button class="back-btn" onclick="goScreen('s-elena')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Elena Cruz</button>
+        <span style="font-size:11px;color:var(--color-text-tertiary);">Registrar contacto</span>
+      </div>
+    </div>
+    <div class="log-body">
+      <div>
+        <div class="llabel">Tipo de contacto</div>
+        <div class="pills">
+          <button class="pill sel" onclick="selPill(this)">WhatsApp</button>
+          <button class="pill" onclick="selPill(this)">Llamada</button>
+          <button class="pill" onclick="selPill(this)">Visita domicilio</button>
+          <button class="pill" onclick="selPill(this)">Clínica</button>
+        </div>
+      </div>
+      <div>
+        <div class="llabel">Resultado</div>
+        <div class="pills" id="outcome-pills">
+          <button class="pill sel" onclick="selOutcome(this)">Contactada</button>
+          <button class="pill" onclick="selOutcome(this)">No contestó</button>
+          <button class="pill" onclick="selOutcome(this)">Cita agendada</button>
+        </div>
+      </div>
+      <div>
+        <div class="llabel">Notas (español o inglés)</div>
+        <textarea>Respondió por WhatsApp. Estresada por situación laboral de esposo. Faltó a cita por cuidado de niños. Reagendaremos para el martes con transporte.</textarea>
+      </div>
+      <div>
+        <div class="llabel">¿Escalar al equipo clínico?</div>
+        <div class="esc-row">
+          <span class="esc-lbl"><i class="ti ti-alert-circle" aria-hidden="true" style="font-size:13px;vertical-align:-1px;margin-right:4px;"></i>Notificar al médico</span>
+          <div class="tog" id="esc-tog" onclick="this.classList.toggle('on')" aria-label="Toggle escalation"><div class="tog-k"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-o" onclick="goScreen('s-elena')">Cancelar</button>
+      <button class="btn-p" onclick="goScreen('s-success')">Guardar</button>
+    </div>
+  </div>
+
+  <!-- S7: Success -->
+  <div class="screen" id="s-success">
+    <div class="success-s">
+      <div class="suc-icon"><i class="ti ti-check" style="font-size:26px;color:#0F6E56;" aria-hidden="true"></i></div>
+      <div class="suc-title">Contacto registrado</div>
+      <div class="suc-sub">El expediente de Elena ha sido actualizado. El equipo clínico ha sido notificado.</div>
+      <button class="btn-p" style="margin-top:8px;width:160px;" onclick="goScreen('s-list')">Volver al inicio</button>
+    </div>
+  </div>
+
+  <!-- S8: Payer Dashboard -->
+  <div class="screen" id="s-dash">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div>
+          <div class="topbar-title">Panel del plan de salud</div>
+          <div class="topbar-sub">Abril 2026 · Health Net Medicaid CA</div>
+        </div>
+        <i class="ti ti-chart-bar" style="font-size:18px;color:#1D9E75;" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="dash-body">
+      <div class="dash-tabs">
+        <button class="dash-tab active" onclick="switchTab(this,'tab-overview')">Resumen</button>
+        <button class="dash-tab" onclick="switchTab(this,'tab-plans')">Planes activos</button>
+      </div>
+
+      <div id="tab-overview">
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="metric-num">85%</div>
+            <div class="metric-lbl">Retención mensual</div>
+            <div class="metric-delta">↑ 12% vs industria</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-num">247</div>
+            <div class="metric-lbl">Miembros activos</div>
+            <div class="metric-delta">↑ 4x vs año anterior</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-num">$340</div>
+            <div class="metric-lbl">Ahorro por miembro/mes</div>
+            <div class="metric-delta">↓ costo total de atención</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-num">23%</div>
+            <div class="metric-lbl">Reducción visitas ER</div>
+            <div class="metric-delta">vs grupo control</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:10px;">
+          <div class="clabel">Métricas de calidad HEDIS</div>
+          <div class="bar-wrap">
+            <div class="bar-label-row"><span class="bar-lbl">Control de diabetes (HbA1c)</span><span class="bar-val">78%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:78%;background:#1D9E75;"></div></div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-label-row"><span class="bar-lbl">Screenings de salud mental</span><span class="bar-val">91%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:91%;background:#1D9E75;"></div></div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-label-row"><span class="bar-lbl">Seguimiento post-hospitalización</span><span class="bar-val">88%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:88%;background:#1D9E75;"></div></div>
+          </div>
+          <div class="bar-wrap" style="margin-bottom:0;">
+            <div class="bar-label-row"><span class="bar-lbl">Satisfacción del miembro</span><span class="bar-val">96%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:96%;background:#1D9E75;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-plans" style="display:none;">
+        <div class="card">
+          <div class="clabel">Planes activos</div>
+          <div class="plan-row">
+            <div><div class="plan-name">Health Net Medicaid CA</div><div class="plan-sub">142 miembros · desde ene 2024</div></div>
+            <span class="plan-badge f-green">Activo</span>
+          </div>
+          <div class="plan-row">
+            <div><div class="plan-name">Anthem Blue Cross CA</div><div class="plan-sub">68 miembros · desde mar 2024</div></div>
+            <span class="plan-badge f-green">Activo</span>
+          </div>
+          <div class="plan-row">
+            <div><div class="plan-name">Health Net TX</div><div class="plan-sub">37 miembros · desde ago 2024</div></div>
+            <span class="plan-badge f-green">Activo</span>
+          </div>
+          <div class="plan-row" style="border:none;">
+            <div><div class="plan-name">Molina Healthcare WA</div><div class="plan-sub">Onboarding en progreso</div></div>
+            <span class="plan-badge f-amber">Pronto</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="clabel">Crecimiento de partnerships</div>
+          <div class="bar-wrap">
+            <div class="bar-label-row"><span class="bar-lbl">2024 Q1</span><span class="bar-val">2 planes</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:17%;background:#9FE1CB;"></div></div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-label-row"><span class="bar-lbl">2024 Q4</span><span class="bar-val">5 planes</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:42%;background:#5DCAA5;"></div></div>
+          </div>
+          <div class="bar-wrap" style="margin-bottom:0;">
+            <div class="bar-label-row"><span class="bar-lbl">2025 Q4</span><span class="bar-val">12+ planes</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:100%;background:#1D9E75;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const map={'s-list':0,'s-elena':1,'s-jorge':2,'s-lucia':3,'s-wa':4,'s-log':5,'s-success':6,'s-dash':7};
+  const btns=document.querySelectorAll('.nav-btn');
+  if(map[id]!==undefined) btns[map[id]].classList.add('active');
+}
+function selPill(el){
+  el.closest('.pills').querySelectorAll('.pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selOutcome(el){
+  el.closest('.pills').querySelectorAll('.pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function sendWa(){
+  const inp=document.getElementById('wa-input');
+  const val=inp.value.trim();
+  if(!val) return;
+  const msgs=document.getElementById('wa-msgs');
+  const d=document.createElement('div');
+  d.innerHTML='<div class="wa-me">'+val+'</div><div class="wa-time wa-time-r">Rosa · ahora</div>';
+  msgs.appendChild(d);
+  inp.value='';
+  msgs.scrollTop=msgs.scrollHeight;
+}
+function switchTab(btn, tabId){
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-overview').style.display='none';
+  document.getElementById('tab-plans').style.display='none';
+  document.getElementById(tabId).style.display='block';
+}
+</script>
