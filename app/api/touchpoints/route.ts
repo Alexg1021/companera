@@ -1,6 +1,8 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import type { ContactType, TouchpointOutcome } from "@/lib/types/database";
+import type { ContactType, MemberRow, TouchpointOutcome } from "@/lib/types/database";
+import { computeTriage, persistedTriageAfterContact } from "@/lib/triage";
 
 const CONTACT_TYPES: ContactType[] = ["whatsapp", "call", "home_visit", "clinic"];
 const OUTCOMES: TouchpointOutcome[] = ["contacted", "no_answer", "appointment_scheduled"];
@@ -50,18 +52,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "outcome inválido" }, { status: 400 });
   }
 
-  const { data: member, error: memErr } = await supabase
+  const { data: fullMember, error: memErr } = await supabase
     .from("members")
-    .select("id, full_name")
+    .select("*")
     .eq("id", memberId)
     .eq("promotora_id", user.id)
     .maybeSingle();
 
-  if (memErr || !member) {
+  if (memErr || !fullMember) {
     return NextResponse.json({ error: "Persona no encontrada" }, { status: 404 });
   }
 
+  const memberRow = fullMember as MemberRow;
   const now = new Date().toISOString();
+  const newTriageStatus = persistedTriageAfterContact(memberRow, now);
 
   const { data: touchpoint, error: tpErr } = await supabase
     .from("touchpoints")
@@ -83,7 +87,10 @@ export async function POST(request: Request) {
 
   const { error: upErr } = await supabase
     .from("members")
-    .update({ last_contacted_at: now })
+    .update({
+      last_contacted_at: now,
+      triage_status: newTriageStatus,
+    })
     .eq("id", memberId)
     .eq("promotora_id", user.id);
 
@@ -92,8 +99,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Contacto guardado pero falló actualizar la persona" }, { status: 500 });
   }
 
+  const { data: updatedMember, error: fetchErr } = await supabase
+    .from("members")
+    .select("*")
+    .eq("id", memberId)
+    .eq("promotora_id", user.id)
+    .maybeSingle();
+
+  if (fetchErr || !updatedMember) {
+    console.error(fetchErr);
+    return NextResponse.json({ error: "Actualizado pero no se pudo leer la persona" }, { status: 500 });
+  }
+
+  const updated = updatedMember as MemberRow;
+  const computedTriage = computeTriage(updated);
+
+  revalidatePath("/members");
+  revalidatePath(`/members/${memberId}`);
+
   if (escalated) {
-    const base = `Escalación — ${member.full_name as string}`;
+    const base = `Escalación — ${updated.full_name}`;
     const msg = notes.length > 0 ? `${base}: ${notes}` : `${base}.`;
     const { error: nErr } = await supabase.from("notifications").insert({
       member_id: memberId,
@@ -107,7 +132,18 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+    revalidatePath("/notifications");
   }
 
-  return NextResponse.json({ ok: true, id: touchpoint.id }, { status: 201 });
+  return NextResponse.json(
+    {
+      ok: true,
+      id: touchpoint.id,
+      member: {
+        ...updated,
+        computedTriage,
+      },
+    },
+    { status: 201 }
+  );
 }

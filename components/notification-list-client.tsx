@@ -43,9 +43,14 @@ export default function NotificationListClient({ initial }: Props) {
 
   if (items.length === 0) {
     return (
-      <p className="px-4 py-8 text-center text-sm text-neutral-500">
-        No hay alertas. Las escalaciones aparecerán aquí cuando las registres desde un contacto.
-      </p>
+      <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-neutral-400" aria-hidden>
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.082A2.25 2.25 0 0021.75 14v-5.25A2.25 2.25 0 0019.5 6.75h-2.035a23.848 23.848 0 00-3.536-1.082M14.857 17.082L12 15.75m-2.857 1.332l-.786.262M12 15.75l.786-.262m0 0l3.75-1.25m-3.75 1.25l-3.75-1.25m0 0l-1.286-.429m1.286.429L9 12.75m-3.75 1.25h9.75" />
+          </svg>
+        </div>
+        <p className="text-sm text-neutral-600">Sin alertas pendientes.</p>
+      </div>
     );
   }
 

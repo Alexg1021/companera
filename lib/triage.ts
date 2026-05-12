@@ -22,6 +22,14 @@ export function computeTriage(member: MemberRow): TriageStatus {
   return "current";
 }
 
+/** DB column `triage_status` after a new contact at `newLastContactIso` (server-side). */
+export function persistedTriageAfterContact(
+  member: MemberRow,
+  newLastContactIso: string
+): TriageStatus {
+  return computeTriage({ ...member, last_contacted_at: newLastContactIso });
+}
+
 export function triageLabel(status: TriageStatus): string {
   switch (status) {
     case "urgent":

@@ -2,7 +2,7 @@
 
 export const dashboardMetrics = {
   retentionRate: { value: 94, label: "Retención anual", delta: "+2.1% vs trimestre anterior" },
-  activeMembers: { value: 12840, label: "Personas activas", delta: "+3.4% vs trimestre anterior" },
+  activeMembers: { label: "Personas activas", delta: "+3.4% vs trimestre anterior" },
   costPerMember: { value: 412, label: "Costo evitado / persona (USD)", delta: "−$18 vs meta" },
   erReduction: { value: 22, label: "Reducción visitas ER", delta: "−4 pts vs año anterior", suffix: "%" },
 } as const;

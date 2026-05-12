@@ -2,7 +2,11 @@
 
 **Compañera** is a working prototype of a **community health worker (promotora) companion app** for Zócalo Health: a mobile-first web tool for care coordination, touchpoint logging, escalations, and a separate **payer** dashboard with illustrative metrics.
 
-**Live deployment:** replace this link after your first Vercel deploy: `https://companera.vercel.app`
+**Live deployment:** `https://companera.vercel.app`
+
+### Why I built this
+
+Zócalo Health focuses on Latino communities where promotoras bridge clinical plans and daily life. This app prototypes how a promotora could see who needs outreach, log contacts in the field, escalate issues safely, and how a payer could glimpse population-level signals—without pretending to be a full EMR.
 
 ---
 
@@ -17,7 +21,7 @@
 ## Architecture (why this shape)
 
 - **Supabase** gives Postgres + Auth in one place, with **RLS** so member and touchpoint data are scoped to the assigned promotora (and notifications follow the same member linkage). The anon key is safe to expose in the browser because policies enforce access; there is no service-role key in this app.
-- **Triage** is computed **on the server** (see `lib/triage.ts`): a member is **urgent** if `last_contacted_at` is null or older than seven days; otherwise the stored `triage_status` can keep someone in **upcoming** (for example Medicaid renewal) even when contact is recent; otherwise **current**.
+- **Triage** is computed **on the server** (see `lib/triage.ts`): a member is **urgent** if `last_contacted_at` is null or older than seven days; otherwise the stored `triage_status` can keep someone in **upcoming** (for example Medicaid renewal) even when contact is recent; otherwise **current**. After each touchpoint save, **`POST /api/touchpoints`** recomputes and persists `triage_status` with `last_contacted_at` and calls **`revalidatePath`** so lists and profiles stay fresh.
 - **Roles** on `public.users` (`promotora`, `clinician`, `payer`) drive routing: payers land on **`/dashboard`** with demo aggregates; promotoras and clinicians use **`/members`** and related flows (`middleware.ts` + `lib/user-role.ts`).
 - **Escalations** on touchpoint save insert a row in **`notifications`**; promotoras list and mark them read under RLS (`003_notifications_update.sql`).
 
@@ -40,6 +44,7 @@ Run SQL in the Supabase **SQL Editor** (or use the Supabase CLI against these fi
 | 1 | `supabase/migrations/001_initial.sql` | Enums, `users`, `members`, `touchpoints`, `notifications`, RLS, auth → `public.users` trigger |
 | 2 | `supabase/migrations/002_member_contact_fields.sql` | `next_appointment`, `whatsapp_phone` on `members` |
 | 3 | `supabase/migrations/003_notifications_update.sql` | RLS `UPDATE` on `notifications` (mark read) |
+| 4 | `supabase/migrations/004_members_select_payer.sql` | Payers may `SELECT` all `members` rows (for live dashboard count; prototype scope) |
 
 ### Auth users (required before seed)
 
@@ -48,7 +53,15 @@ Run SQL in the Supabase **SQL Editor** (or use the Supabase CLI against these fi
 
 ### Seed data
 
-After `demo@zocalo.health` exists, run **`supabase/seed.sql`** in the SQL Editor. It wipes and re-seeds demo members and touchpoints for that promotora.
+After `demo@zocalo.health` exists, run **`supabase/seed.sql`** in the SQL Editor. It wipes and re-seeds **~18** demo members and touchpoints for that promotora.
+
+To regenerate seed SQL from the built-in dataset (optional):
+
+```bash
+npm run seed:generate
+```
+
+Then run the generated `supabase/seed.sql` in Supabase as above.
 
 ---
 
@@ -78,9 +91,9 @@ npm run lint
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`  
    Use the same values as in `.env.local`. Apply to **Production** (and Preview if you use previews).
-4. Deploy. Smoke-test: login, member list, log touchpoint, optional escalation → **Alertas**, payer **`/dashboard`** if configured.
+4. Deploy. Smoke-test: login, member list, log touchpoint, optional escalation → **Alertas**, payer **`/dashboard`** if configured. Install to home screen (PWA) from the browser menu on a phone.
 
-Update the **Live deployment** link at the top of this README with your production URL.
+If your production hostname differs, update the **Live deployment** link at the top of this README.
 
 ---
 
@@ -114,12 +127,15 @@ components/           # Client components (log form, sign out, notifications, et
 lib/                  # Supabase clients, triage, members/member detail, dashboard demo data
 middleware.ts         # Session refresh + auth + role redirects
 supabase/migrations/  # Ordered SQL migrations
-supabase/seed.sql     # Demo data for demo@zocalo.health
+supabase/seed.sql     # Demo data (run `npm run seed:generate` to rebuild from scripts/generate-seed.mjs)
+scripts/               # Seed generator
+docs/                  # Original build prompt + HTML mock
+public/manifest.json   # PWA manifest (installable on mobile)
 ```
 
 ---
 
 ## Reference
 
-- Product / build notes: `zocalo_prototype_prompt.md`  
-- UI reference mock: `zocalo_health_full_demo.html`  
+- Product / build notes: `docs/zocalo_prototype_prompt.md`  
+- UI reference mock: `docs/zocalo_health_full_demo.html`  

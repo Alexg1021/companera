@@ -11,6 +11,8 @@ import {
 import { contactTypeLabel, outcomeLabel } from "@/lib/contact-labels";
 import { triageBadgeClass, triageLabel } from "@/lib/triage";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = { params: { id: string } };
 
 export default async function MemberProfilePage({ params }: PageProps) {
@@ -36,7 +38,7 @@ export default async function MemberProfilePage({ params }: PageProps) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-neutral-900">Compañera</p>
-          <p className="text-[10px] text-neutral-500">Zócalo Health</p>
+          <p className="text-xs text-neutral-500">Zócalo Health</p>
         </div>
       </header>
 
@@ -74,7 +76,7 @@ export default async function MemberProfilePage({ params }: PageProps) {
         </div>
       </div>
 
-      <div className="space-y-2.5 px-4 pb-28 pt-3">
+      <div className="space-y-2.5 px-4 pb-32 pt-3">
         {computedTriage === "urgent" && (
           <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
             <span className="text-amber-800" aria-hidden>
@@ -111,18 +113,22 @@ export default async function MemberProfilePage({ params }: PageProps) {
         </section>
 
         <section>
-          <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">
             Últimos contactos
           </p>
           {timeline.length === 0 ? (
-            <p className="text-xs text-neutral-500">Aún no hay contactos registrados.</p>
+            <div className="rounded-lg border border-dashed border-neutral-200 bg-neutral-50/80 px-3 py-6 text-center">
+              <p className="text-sm text-neutral-600">
+                Sin historial de contacto aún. Registra el primer contacto.
+              </p>
+            </div>
           ) : (
             <ul className="space-y-3">
               {timeline.map((t) => (
                 <li key={t.id} className="flex gap-2">
                   <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-brand" aria-hidden />
                   <div className="min-w-0">
-                    <p className="text-[10px] text-neutral-400">{formatTouchpointWhen(t.created_at)}</p>
+                    <p className="text-xs text-neutral-400">{formatTouchpointWhen(t.created_at)}</p>
                     <p className="text-xs text-neutral-900">
                       {contactTypeLabel(t.contact_type)} · {outcomeLabel(t.outcome)}
                     </p>
@@ -135,11 +141,14 @@ export default async function MemberProfilePage({ params }: PageProps) {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-10 border-t border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur-sm">
+      <div
+        className="fixed bottom-0 left-0 right-0 z-10 border-t border-neutral-200 bg-white/95 px-4 pt-3 backdrop-blur-sm"
+        style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))" }}
+      >
         <div className="mx-auto flex max-w-phone gap-2">
           <Link
             href={`/members/${member.id}/log`}
-            className="flex-1 rounded-lg bg-brand py-2.5 text-center text-sm font-medium text-white"
+            className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-brand py-3 text-center text-sm font-medium text-white"
           >
             Registrar
           </Link>
@@ -148,12 +157,12 @@ export default async function MemberProfilePage({ params }: PageProps) {
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 rounded-lg border border-neutral-200 py-2.5 text-center text-sm text-neutral-900"
+              className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-neutral-200 py-3 text-center text-sm text-neutral-900"
             >
               WhatsApp
             </a>
           ) : (
-            <span className="flex-1 rounded-lg border border-dashed border-neutral-200 py-2.5 text-center text-sm text-neutral-400">
+            <span className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-dashed border-neutral-200 py-3 text-center text-sm text-neutral-400">
               WhatsApp
             </span>
           )}
