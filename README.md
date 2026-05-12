@@ -2,7 +2,7 @@
 
 **Compañera** is a working prototype of a **community health worker (promotora) companion app** for Zócalo Health: a mobile-first web tool for care coordination, touchpoint logging, escalations, and a separate **payer** dashboard with illustrative metrics.
 
-**Live deployment:** replace this link after your first Vercel deploy: `https://YOUR-PROJECT.vercel.app`
+**Live deployment:** replace this link after your first Vercel deploy: `https://companera.vercel.app`
 
 ---
 
