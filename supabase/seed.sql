@@ -1,6 +1,7 @@
 -- Seed members + touchpoints for demo@zocalo.health
 -- Prerequisite: create user in Authentication with email demo@zocalo.health
--- (so public.users row exists via trigger). Then run in SQL Editor.
+-- (so public.users row exists via trigger). Run 002_member_contact_fields.sql if needed.
+-- Then run in SQL Editor.
 
 update public.users
 set full_name = 'Rosa Mendoza'
@@ -20,21 +21,40 @@ where promotora_id = (select id from public.users where email = 'demo@zocalo.hea
 
 insert into public.members (
   full_name, age, conditions, language, preferred_contact, insurance_plan,
-  last_contacted_at, triage_status, promotora_id
+  last_contacted_at, triage_status, next_appointment, whatsapp_phone, promotora_id
 )
-select v.*, u.id
+select
+  v.full_name,
+  v.age,
+  v.conditions,
+  v.language,
+  v.preferred_contact,
+  v.insurance_plan,
+  v.last_contacted_at,
+  v.triage_status,
+  v.next_appointment,
+  v.whatsapp_phone,
+  u.id
 from (values
   ('Elena Cruz', 54, 'Diabetes T2, hipertensión', 'Español', 'WhatsApp', 'Health Net Medicaid',
-    null::timestamptz, 'urgent'::public.triage_status),
+    null::timestamptz, 'urgent'::public.triage_status,
+    'Seguimiento pendiente · faltó cita 5/2', '525511110001'),
   ('Jorge Martínez', 61, 'EPOC, Diabetes T2', 'Español / inglés básico', 'WhatsApp', 'Anthem Blue Cross',
-    timestamptz '2026-04-20 10:00:00+00', 'urgent'::public.triage_status),
+    timestamptz '2026-04-20 10:00:00+00', 'urgent'::public.triage_status,
+    'Seguimiento post-ER', '525511110002'),
   ('Lucía Ramírez', 38, 'Ansiedad, asma leve', 'Español', 'WhatsApp', 'Health Net Medicaid',
-    timestamptz '2026-05-09 15:00:00+00', 'upcoming'::public.triage_status),
+    timestamptz '2026-05-09 15:00:00+00', 'upcoming'::public.triage_status,
+    'Renovación Medicaid antes del 31/5', '525511110003'),
   ('María González', 45, 'Hipertensión', 'Español', 'WhatsApp', 'Health Net',
-    timestamptz '2026-05-10 14:30:00+00', 'current'::public.triage_status),
+    timestamptz '2026-05-10 14:30:00+00', 'current'::public.triage_status,
+    'Próxima cita 18/5', '525511110004'),
   ('Carlos Fuentes', 52, 'Diabetes T2', 'Español / inglés', 'Llamada', 'Anthem',
-    timestamptz '2026-05-09 11:00:00+00', 'current'::public.triage_status)
-) as v(full_name, age, conditions, language, preferred_contact, insurance_plan, last_contacted_at, triage_status)
+    timestamptz '2026-05-09 11:00:00+00', 'current'::public.triage_status,
+    'Laboratorios pendientes', '525511110005')
+) as v(
+  full_name, age, conditions, language, preferred_contact, insurance_plan,
+  last_contacted_at, triage_status, next_appointment, whatsapp_phone
+)
 cross join (select id from public.users where email = 'demo@zocalo.health' limit 1) u;
 
 insert into public.touchpoints (member_id, promotora_id, contact_type, outcome, notes, escalated, created_at)

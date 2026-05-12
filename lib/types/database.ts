@@ -26,6 +26,10 @@ export type MemberRow = {
   triage_status: TriageStatus;
   promotora_id: string | null;
   created_at: string;
+  /** Human-readable next visit / renewal / follow-up line */
+  next_appointment?: string | null;
+  /** Digits or E.164 for https://wa.me/… */
+  whatsapp_phone?: string | null;
 };
 
 export type TouchpointRow = {
