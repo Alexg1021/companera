@@ -5,6 +5,7 @@ const es = {
   "nav.alerts": "Alertas",
   "nav.panel": "Panel",
   "nav.settings": "Ajustes",
+  "nav.profile": "Perfil",
   "nav.main": "Navegación principal",
   "notifications.logo_subtitle": "Alertas · Escalaciones",
   "members.stat_personas": "Personas",
@@ -19,6 +20,16 @@ const es = {
   "settings.signOut": "Cerrar sesión",
   "settings.accountSection": "Cuenta",
   "header.alerts": "Alertas",
+  "profile.title": "Perfil",
+  "profile.subtitle": "Tu cuenta",
+  "profile.label_name": "Nombre",
+  "profile.label_email": "Correo",
+  "profile.label_role": "Rol",
+  "profile.role_promotora": "Promotora",
+  "profile.role_clinician": "Personal clínico",
+  "profile.role_payer": "Vista pagador",
+  "profile.back_members": "← Personas",
+  "profile.back_dashboard": "← Panel",
 } as const;
 
 const en: Record<keyof typeof es, string> = {
@@ -26,6 +37,7 @@ const en: Record<keyof typeof es, string> = {
   "nav.alerts": "Alerts",
   "nav.panel": "Dashboard",
   "nav.settings": "Settings",
+  "nav.profile": "Profile",
   "nav.main": "Main navigation",
   "notifications.logo_subtitle": "Alerts · Escalations",
   "members.stat_personas": "People",
@@ -40,6 +52,16 @@ const en: Record<keyof typeof es, string> = {
   "settings.signOut": "Log out",
   "settings.accountSection": "Account",
   "header.alerts": "Alerts",
+  "profile.title": "Profile",
+  "profile.subtitle": "Your account",
+  "profile.label_name": "Name",
+  "profile.label_email": "Email",
+  "profile.label_role": "Role",
+  "profile.role_promotora": "Promotora",
+  "profile.role_clinician": "Clinical staff",
+  "profile.role_payer": "Payer view",
+  "profile.back_members": "← People",
+  "profile.back_dashboard": "← Dashboard",
 };
 
 export type MessageKey = keyof typeof es;

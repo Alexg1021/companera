@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import { Eye, EyeOff, Heart } from "lucide-react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -11,6 +11,7 @@ export default function LoginForm() {
   const next = searchParams.get("next") || "/members";
   const [email, setEmail] = useState("demo@zocalo.health");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -68,15 +69,26 @@ export default function LoginForm() {
           <label htmlFor="password" className="mb-1 block text-xs font-medium text-neutral-600">
             Contraseña
           </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none ring-brand-teal focus:ring-2"
-            required
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg border border-neutral-200 py-2 pl-3 pr-11 text-sm outline-none ring-brand-teal focus:ring-2"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-0 top-0 flex h-full min-w-[44px] items-center justify-center rounded-r-lg text-neutral-500 transition-colors duration-150 hover:bg-neutral-50 hover:text-neutral-800"
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              aria-pressed={showPassword}
+            >
+              {showPassword ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}
+            </button>
+          </div>
         </div>
         <button
           type="submit"

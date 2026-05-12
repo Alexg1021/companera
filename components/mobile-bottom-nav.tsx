@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart2, Bell, Settings, Users } from "lucide-react";
+import { BarChart2, Bell, Settings, User, Users } from "lucide-react";
 import { useI18n } from "@/components/locale-provider";
 import type { MessageKey } from "@/lib/i18n-messages";
 import type { UserRole } from "@/lib/types/database";
@@ -65,6 +65,7 @@ function StaffBottomNav({
 }) {
   const personasActive = pathname === "/members" || pathname.startsWith("/members/");
   const alertasActive = pathname.startsWith("/notifications");
+  const profileActive = pathname.startsWith("/profile");
   const settingsActive = pathname.startsWith("/settings");
   return (
     <NavChrome>
@@ -86,6 +87,14 @@ function StaffBottomNav({
         badge={unread}
       />
       <NavLink
+        href="/profile"
+        label={t("nav.profile")}
+        icon={
+          <User size={22} strokeWidth={1.75} className={profileActive ? "text-brand-navy" : "text-neutral-500"} />
+        }
+        active={profileActive}
+      />
+      <NavLink
         href="/settings"
         label={t("nav.settings")}
         icon={
@@ -99,6 +108,7 @@ function StaffBottomNav({
 
 function PayerBottomNav({ pathname, t }: { pathname: string; t: (key: MessageKey) => string }) {
   const panelActive = pathname === "/dashboard";
+  const profileActive = pathname.startsWith("/profile");
   const settingsActive = pathname.startsWith("/settings");
   return (
     <NavChrome>
@@ -113,6 +123,14 @@ function PayerBottomNav({ pathname, t }: { pathname: string; t: (key: MessageKey
           />
         }
         active={panelActive}
+      />
+      <NavLink
+        href="/profile"
+        label={t("nav.profile")}
+        icon={
+          <User size={22} strokeWidth={1.75} className={profileActive ? "text-brand-navy" : "text-neutral-500"} />
+        }
+        active={profileActive}
       />
       <NavLink
         href="/settings"
@@ -130,15 +148,18 @@ function PayerBottomNav({ pathname, t }: { pathname: string; t: (key: MessageKey
   );
 }
 
-/** Payer and staff both use /settings; show placeholders until `GET /api/me` resolves. */
+/** Shown on /settings or /profile while role is still loading. */
 function SettingsNavSkeleton() {
   return (
     <NavChrome>
-      <div className="flex flex-1 items-center justify-center px-2">
-        <div className="h-9 w-full max-w-[5.5rem] animate-pulse rounded-lg bg-neutral-100" />
+      <div className="flex flex-1 items-center justify-center px-1">
+        <div className="h-9 w-full max-w-[3.25rem] animate-pulse rounded-lg bg-neutral-100" />
       </div>
-      <div className="flex flex-1 items-center justify-center px-2">
-        <div className="h-9 w-full max-w-[5.5rem] animate-pulse rounded-lg bg-neutral-100" />
+      <div className="flex flex-1 items-center justify-center px-1">
+        <div className="h-9 w-full max-w-[3.25rem] animate-pulse rounded-lg bg-neutral-100" />
+      </div>
+      <div className="flex flex-1 items-center justify-center px-1">
+        <div className="h-9 w-full max-w-[3.25rem] animate-pulse rounded-lg bg-neutral-100" />
       </div>
     </NavChrome>
   );
@@ -153,10 +174,17 @@ export default function MobileBottomNav() {
   const isLogin = pathname === "/login";
   const isDashboardPath = pathname.startsWith("/dashboard");
   const isSettingsPath = pathname.startsWith("/settings");
+  const isProfilePath = pathname.startsWith("/profile");
   const isStaffOnlyPath =
     pathname.startsWith("/members") ||
     pathname.startsWith("/notifications") ||
     pathname === "/success";
+
+  const payerShell =
+    isDashboardPath || ((isSettingsPath || isProfilePath) && role === "payer");
+  const ambiguousRole = (isSettingsPath || isProfilePath) && role === null;
+  const staffSettingsOrProfile =
+    (isSettingsPath || isProfilePath) && role !== null && role !== "payer";
 
   useEffect(() => {
     if (isLogin) return;
@@ -201,15 +229,15 @@ export default function MobileBottomNav() {
     return <StaffBottomNav pathname={pathname} unread={unread} t={t} />;
   }
 
-  if (isDashboardPath || (isSettingsPath && role === "payer")) {
+  if (payerShell) {
     return <PayerBottomNav pathname={pathname} t={t} />;
   }
 
-  if (isSettingsPath && role === null) {
+  if (ambiguousRole) {
     return <SettingsNavSkeleton />;
   }
 
-  if (isSettingsPath) {
+  if (staffSettingsOrProfile) {
     return <StaffBottomNav pathname={pathname} unread={unread} t={t} />;
   }
 
