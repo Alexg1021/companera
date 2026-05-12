@@ -113,5 +113,5 @@ join (values
 -- 1) Create user payer@zocalo.health in Authentication.
 -- 2) Run:
 --    update public.users
---    set role = 'payer', full_name = 'Alex Rivera'
+--    set role = 'payer', full_name = 'Alex Gutierrez'
 --    where email = 'payer@zocalo.health';

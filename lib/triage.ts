@@ -41,13 +41,14 @@ export function triageLabel(status: TriageStatus): string {
   }
 }
 
+/** Status badge — style guide tokens + text label. */
 export function triageBadgeClass(status: TriageStatus): string {
   switch (status) {
     case "urgent":
-      return "bg-red-50 text-red-800";
+      return "bg-status-urgent-bg text-status-urgent-text text-[10px] font-medium px-[7px] py-[2px] rounded-full";
     case "upcoming":
-      return "bg-amber-50 text-amber-900";
+      return "bg-status-upcoming-bg text-status-upcoming-text text-[10px] font-medium px-[7px] py-[2px] rounded-full";
     case "current":
-      return "bg-lime-50 text-lime-900";
+      return "bg-status-current-bg text-status-current-text text-[10px] font-medium px-[7px] py-[2px] rounded-full";
   }
 }

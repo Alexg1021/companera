@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import AppLogoBar from "@/components/app-logo-bar";
 import { getUserRole } from "@/lib/user-role";
 import { activePlans, dashboardMetrics, hedisMetrics } from "@/lib/dashboard-demo";
 
@@ -17,7 +18,7 @@ function MetricCard({
   suffix?: string;
 }) {
   return (
-    <div className="rounded-lg bg-neutral-50 px-3 py-2.5">
+    <div className="rounded-lg bg-neutral-100 p-[10px]">
       <div className="text-xl font-medium text-neutral-900">
         {value}
         {suffix ? <span className="text-base">{suffix}</span> : null}
@@ -39,7 +40,7 @@ function HedisBar({ label, value, code }: { label: string; value: number; code: 
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
         <div
-          className="h-full rounded-full bg-brand transition-all"
+          className="h-full rounded-full bg-brand-teal transition-all"
           style={{ width: `${Math.min(100, value)}%` }}
         />
       </div>
@@ -71,27 +72,17 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto min-h-screen max-w-phone bg-white pb-8">
-      <header className="flex items-center justify-between gap-2 border-b border-neutral-200 px-4 py-2.5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-xs font-semibold text-white">
-            C
-          </div>
-          <div>
-            <p className="text-sm font-medium leading-tight text-neutral-900">Compañera</p>
-            <p className="text-xs text-neutral-500">Panel · planes de salud</p>
-          </div>
-        </div>
-      </header>
+      <AppLogoBar subtitle="Panel · planes de salud" />
 
-      <div className="border-b border-neutral-100 px-4 py-3">
+      <div className="border-b border-neutral-100 px-[18px] py-3">
         <p className="text-xs text-neutral-500">Vista pagador</p>
         <p className="text-base font-medium text-neutral-900">
           Hola{profile?.full_name ? `, ${profile.full_name.split(/\s+/)[0]}` : ""}
         </p>
       </div>
 
-      <div className="px-4 pt-4">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">
+      <div className="px-[18px] pt-4">
+        <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
           Indicadores clave
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -120,8 +111,8 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="mt-6 px-4">
-        <p className="mb-3 text-xs font-medium uppercase tracking-wide text-neutral-400">
+      <div className="mt-6 px-[18px]">
+        <p className="mb-3 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
           Calidad HEDIS (demo)
         </p>
         {hedisMetrics.map((h) => (
@@ -129,8 +120,8 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      <div className="mt-6 px-4">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">
+      <div className="mt-6 px-[18px]">
+        <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
           Planes activos
         </p>
         {activePlans.length === 0 ? (
@@ -160,8 +151,8 @@ export default async function DashboardPage() {
                 <span
                   className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                     p.status === "Activo"
-                      ? "bg-lime-50 text-lime-900"
-                      : "bg-amber-50 text-amber-900"
+                      ? "bg-status-current-bg text-status-current-text"
+                      : "bg-status-upcoming-bg text-status-upcoming-text"
                   }`}
                 >
                   {p.status}
@@ -172,7 +163,7 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      <p className="mt-6 px-4 text-center text-xs text-neutral-400">
+      <p className="mt-6 px-[18px] text-center text-xs text-neutral-400">
         Indicadores de ejemplo salvo &quot;Personas activas&quot; (total en base de datos).
       </p>
     </div>

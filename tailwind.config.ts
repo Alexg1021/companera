@@ -11,8 +11,20 @@ const config: Config = {
       colors: {
         brand: {
           DEFAULT: "#1D9E75",
-          dark: "#085041",
+          navy: "#1A2E4A",
+          teal: "#1D9E75",
+          "teal-light": "#E1F5EE",
+          "teal-dark": "#085041",
           muted: "#E1F5EE",
+          dark: "#085041",
+        },
+        status: {
+          "urgent-bg": "#FCEBEB",
+          "urgent-text": "#A32D2D",
+          "upcoming-bg": "#FAEEDA",
+          "upcoming-text": "#854F0B",
+          "current-bg": "#EAF3DE",
+          "current-text": "#3B6D11",
         },
       },
       maxWidth: {

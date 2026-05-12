@@ -1,20 +1,17 @@
 export default function MembersListSkeleton() {
   return (
     <div className="mx-auto min-h-screen max-w-phone animate-pulse bg-white shadow-sm">
-      <header className="flex items-center justify-between border-b border-neutral-200 px-4 py-2.5">
+      <header className="flex items-center justify-between border-b border-neutral-200 bg-brand-navy px-[18px] py-[10px]">
         <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-neutral-200" />
+          <div className="h-[26px] w-[26px] rounded-[8px] bg-white/20" />
           <div className="space-y-1">
-            <div className="h-3.5 w-24 rounded bg-neutral-200" />
-            <div className="h-2.5 w-16 rounded bg-neutral-200" />
+            <div className="h-3.5 w-28 rounded bg-white/20" />
+            <div className="h-2.5 w-24 rounded bg-white/15" />
           </div>
         </div>
-        <div className="flex gap-2">
-          <div className="h-8 w-16 rounded-lg bg-neutral-200" />
-          <div className="h-8 w-12 rounded-lg bg-neutral-200" />
-        </div>
+        <div className="h-8 w-16 rounded-lg bg-white/15" />
       </header>
-      <div className="border-b border-neutral-200 px-4 pb-2 pt-3">
+      <div className="border-b border-neutral-200 px-[18px] pb-2 pt-3">
         <div className="flex justify-between">
           <div className="space-y-2">
             <div className="h-4 w-40 rounded bg-neutral-200" />
@@ -30,7 +27,7 @@ export default function MembersListSkeleton() {
       </div>
       <div className="divide-y divide-neutral-100">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-3 px-4 py-3">
+          <div key={i} className="flex items-center gap-3 px-[18px] py-3">
             <div className="h-9 w-9 shrink-0 rounded-full bg-neutral-200" />
             <div className="min-w-0 flex-1 space-y-2">
               <div className="h-3 w-28 rounded bg-neutral-200" />

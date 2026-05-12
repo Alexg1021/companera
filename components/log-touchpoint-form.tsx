@@ -66,7 +66,7 @@ export default function LogTouchpointForm({ memberId, memberName }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-1 flex-col gap-3 px-4 py-4"
+      className="flex flex-1 flex-col gap-3 px-[18px] py-4"
       style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}
     >
       <p className="text-xs text-neutral-500">
@@ -81,10 +81,10 @@ export default function LogTouchpointForm({ memberId, memberName }: Props) {
               key={value}
               type="button"
               onClick={() => setContactType(value)}
-              className={`min-h-[44px] rounded-full border px-4 py-2 text-xs transition ${
+              className={`min-h-[44px] rounded-full border px-3 py-[5px] text-xs transition-all duration-200 ${
                 contactType === value
-                  ? "border-brand bg-brand-muted font-medium text-brand-dark"
-                  : "border-neutral-200 text-neutral-600"
+                  ? "border-brand-teal bg-brand-teal-light font-medium text-brand-teal-dark"
+                  : "border-neutral-200 text-neutral-500"
               }`}
             >
               {label}
@@ -101,10 +101,10 @@ export default function LogTouchpointForm({ memberId, memberName }: Props) {
               key={value}
               type="button"
               onClick={() => setOutcome(value)}
-              className={`min-h-[44px] rounded-full border px-4 py-2 text-xs transition ${
+              className={`min-h-[44px] rounded-full border px-3 py-[5px] text-xs transition-all duration-200 ${
                 outcome === value
-                  ? "border-brand bg-brand-muted font-medium text-brand-dark"
-                  : "border-neutral-200 text-neutral-600"
+                  ? "border-brand-teal bg-brand-teal-light font-medium text-brand-teal-dark"
+                  : "border-neutral-200 text-neutral-500"
               }`}
             >
               {label}
@@ -123,7 +123,7 @@ export default function LogTouchpointForm({ memberId, memberName }: Props) {
           onChange={(e) => setNotes(e.target.value)}
           rows={4}
           placeholder="Notas (ES / EN) — breve resumen del contacto…"
-          className="w-full resize-none rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-900 outline-none ring-brand focus:ring-2"
+          className="w-full resize-none rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-900 outline-none ring-brand-teal focus:ring-2"
         />
       </div>
 
@@ -164,14 +164,14 @@ export default function LogTouchpointForm({ memberId, memberName }: Props) {
       >
         <Link
           href={`/members/${memberId}`}
-          className="flex min-h-[44px] flex-1 items-center justify-center rounded-lg border border-neutral-200 text-sm text-neutral-800"
+          className="flex min-h-[44px] flex-1 items-center justify-center rounded-lg border border-neutral-200 text-sm text-neutral-800 transition-colors duration-150 hover:bg-neutral-50"
         >
           Cancelar
         </Link>
         <button
           type="submit"
           disabled={loading}
-          className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-lg bg-brand text-sm font-medium text-white disabled:opacity-60"
+          className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-lg bg-brand-navy py-[9px] text-xs font-medium text-white transition-colors duration-150 hover:bg-brand-navy/90 disabled:opacity-60"
         >
           {loading ? (
             <>

@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import AppLogoBar from "@/components/app-logo-bar";
+import { avatarClassForMemberId } from "@/lib/avatar";
 import { initials } from "@/lib/members-data";
 import {
   formatTouchpointWhen,
@@ -32,61 +35,41 @@ export default async function MemberProfilePage({ params }: PageProps) {
 
   return (
     <div className="mx-auto min-h-screen max-w-phone bg-white pb-6">
-      <header className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-xs font-semibold text-white">
-          C
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-neutral-900">Compañera</p>
-          <p className="text-xs text-neutral-500">Zócalo Health</p>
-        </div>
-      </header>
+      <AppLogoBar subtitle={member.full_name} />
 
-      <div className="border-b border-neutral-200 px-4 py-3">
-        <Link href="/members" className="text-sm text-brand">
-          ← Lista
+      <div className="border-b border-neutral-200 px-[18px] py-3">
+        <Link href="/members" className="text-sm font-medium text-brand-teal transition-colors duration-150 hover:text-brand-teal-dark">
+          ← Mis personas
         </Link>
         <div className="mt-4 flex items-start gap-3">
           <div
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-medium ${
-              computedTriage === "urgent"
-                ? "bg-orange-50 text-orange-950"
-                : computedTriage === "upcoming"
-                  ? "bg-violet-50 text-violet-950"
-                  : "bg-brand-muted text-brand-dark"
-            }`}
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-medium ${avatarClassForMemberId(member.id)}`}
             aria-hidden
           >
             {initials(member.full_name)}
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="text-[15px] font-medium text-neutral-900">{member.full_name}</h1>
+            <h1 className="text-[13px] font-medium text-neutral-900">{member.full_name}</h1>
             <p className="mt-0.5 text-xs text-neutral-500">
               {member.age != null ? `${member.age} años` : "Edad no registrada"}
               {member.conditions ? ` · ${member.conditions}` : ""}
             </p>
-            <span
-              className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${triageBadgeClass(
-                computedTriage
-              )}`}
-            >
+            <span className={`mt-2 inline-block ${triageBadgeClass(computedTriage)}`}>
               {triageLabel(computedTriage)}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2.5 px-4 pb-44 pt-3">
+      <div className="space-y-2.5 px-[18px] pb-44 pt-3">
         {computedTriage === "urgent" && (
-          <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
-            <span className="text-amber-800" aria-hidden>
-              !
-            </span>
-            <p className="text-xs leading-relaxed text-amber-950">{urgentAlertCopy(member)}</p>
+          <div className="flex gap-2 rounded-lg bg-status-urgent-bg p-[10px]">
+            <AlertTriangle size={15} className="mt-px shrink-0 text-status-urgent-text" aria-hidden />
+            <p className="text-xs leading-relaxed text-status-urgent-text">{urgentAlertCopy(member)}</p>
           </div>
         )}
 
-        <section className="rounded-lg bg-neutral-50 px-3 py-2.5">
+        <section className="rounded-lg bg-neutral-100 p-[10px]">
           <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
             Plan y preferencias
           </p>
@@ -113,7 +96,7 @@ export default async function MemberProfilePage({ params }: PageProps) {
         </section>
 
         <section>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">
+          <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
             Últimos contactos
           </p>
           {timeline.length === 0 ? (
@@ -126,9 +109,9 @@ export default async function MemberProfilePage({ params }: PageProps) {
             <ul className="space-y-3">
               {timeline.map((t) => (
                 <li key={t.id} className="flex gap-2">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-brand" aria-hidden />
+                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-brand-teal" aria-hidden />
                   <div className="min-w-0">
-                    <p className="text-xs text-neutral-400">{formatTouchpointWhen(t.created_at)}</p>
+                    <p className="text-[11px] text-neutral-400">{formatTouchpointWhen(t.created_at)}</p>
                     <p className="text-xs text-neutral-900">
                       {contactTypeLabel(t.contact_type)} · {outcomeLabel(t.outcome)}
                     </p>
@@ -142,15 +125,16 @@ export default async function MemberProfilePage({ params }: PageProps) {
       </div>
 
       <div
-        className="fixed left-0 right-0 z-[90] border-t border-neutral-200 bg-white/95 px-4 pt-3 backdrop-blur-sm"
+        className="fixed left-0 right-0 z-[90] border-t border-neutral-200 bg-white/95 px-[18px] pt-3 backdrop-blur-sm"
         style={{
           bottom: "calc(3.5rem + max(4px, env(safe-area-inset-bottom, 0px)))",
+          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
         }}
       >
         <div className="mx-auto flex max-w-phone gap-2">
           <Link
             href={`/members/${member.id}/log`}
-            className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-brand py-3 text-center text-sm font-medium text-white"
+            className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-brand-navy py-3 text-center text-xs font-medium text-white transition-colors duration-150 hover:bg-brand-navy/90"
           >
             Registrar
           </Link>
@@ -159,12 +143,12 @@ export default async function MemberProfilePage({ params }: PageProps) {
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-neutral-200 py-3 text-center text-sm text-neutral-900"
+              className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 py-3 text-center text-xs text-neutral-900 transition-colors duration-150 hover:bg-neutral-50"
             >
               WhatsApp
             </a>
           ) : (
-            <span className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-dashed border-neutral-200 py-3 text-center text-sm text-neutral-400">
+            <span className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-dashed border-neutral-200 py-3 text-center text-xs text-neutral-400">
               WhatsApp
             </span>
           )}

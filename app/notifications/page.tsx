@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserRole } from "@/lib/user-role";
 import type { NotificationRow } from "@/lib/types/database";
+import AppLogoBar from "@/components/app-logo-bar";
 import NotificationListClient from "@/components/notification-list-client";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +26,7 @@ export default async function NotificationsPage() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-phone px-4 py-8 text-center text-sm text-red-700">
+      <div className="mx-auto max-w-phone px-[18px] py-8 text-center text-sm text-red-700">
         No se pudieron cargar las alertas.
       </div>
     );
@@ -53,20 +54,13 @@ export default async function NotificationsPage() {
 
   return (
     <div className="mx-auto min-h-screen max-w-phone bg-white">
-      <header className="flex items-center justify-between gap-2 border-b border-neutral-200 px-4 py-2.5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-xs font-semibold text-white">
-            C
-          </div>
-          <div>
-            <p className="text-sm font-medium leading-tight text-neutral-900">Alertas</p>
-            <p className="text-[10px] text-neutral-500">Escalaciones</p>
-          </div>
-        </div>
-      </header>
+      <AppLogoBar subtitle="Alertas · Escalaciones" />
 
-      <div className="border-b border-neutral-100 px-4 py-3">
-        <Link href="/members" className="text-sm text-brand">
+      <div className="border-b border-neutral-100 px-[18px] py-3">
+        <Link
+          href="/members"
+          className="text-sm font-medium text-brand-teal transition-colors duration-150 hover:text-brand-teal-dark"
+        >
           ← Mis personas
         </Link>
       </div>
